@@ -29,6 +29,22 @@
     --nav-height: 80px;
 }
 
+/* Light Theme Variable Overrides */
+[data-theme="light"] {
+    --clr-bg: 210 25% 97%;          /* Soft Clean light grey background (#f4f6f8) */
+    --clr-surface: 0 0% 100%;       /* Pure White Card Surface (#ffffff) */
+    --clr-border: 210 15% 86%;      /* Soft Light Border */
+    --clr-border-glow: 210 15% 76%;
+    
+    --clr-indigo: 239 84% 58%;      /* Adjusted for readability on light surface */
+    --clr-cyan: 188 86% 38%;        /* Adjusted for readability on light surface */
+    --clr-emerald: 160 84% 33%;
+    
+    --clr-text-primary: 220 30% 12%;   /* Dark Slate Text (#1b1e25) */
+    --clr-text-secondary: 220 15% 36%; /* Slate Grey Text */
+    --clr-text-muted: 220 10% 55%;     /* Muted Grey Text */
+}
+
 /* Reset Styles */
 *, *::before, *::after {
     box-sizing: border-box;
@@ -49,6 +65,7 @@ body {
     overflow-x: hidden;
     position: relative;
     min-height: 100vh;
+    transition: background-color var(--transition-smooth), color var(--transition-smooth);
 }
 
 /* Scrollbar Customization */
@@ -122,8 +139,8 @@ body {
    GLASSMORPHISM & GENERAL STYLES
    ========================================== */
 .glass-card {
-    background: rgba(18, 18, 23, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: hsla(var(--clr-surface) / 0.4);
+    border: 1px solid hsla(var(--clr-border) / 0.5);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-radius: 20px;
@@ -132,9 +149,9 @@ body {
 }
 
 .glass-card:hover {
-    border-color: rgba(99, 102, 241, 0.2);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 
-                0 0 50px rgba(99, 102, 241, 0.05);
+    border-color: hsla(var(--clr-indigo) / 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 
+                0 0 50px hsla(var(--clr-indigo) / 0.08);
 }
 
 /* Section Title Headers */
@@ -224,6 +241,31 @@ body {
 .btn-sm {
     padding: 0.6rem 1.5rem;
     font-size: 0.9rem;
+}
+
+/* Theme Toggle Button */
+.btn-theme {
+    background: none;
+    border: 1px solid hsla(var(--clr-border) / 0.8);
+    color: hsl(var(--clr-text-primary));
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background-color: hsla(var(--clr-surface) / 0.5);
+    transition: var(--transition-fast);
+    padding: 0;
+    margin-right: 0.75rem;
+}
+
+.btn-theme:hover {
+    border-color: hsl(var(--clr-indigo));
+    color: hsl(var(--clr-indigo));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px hsla(var(--clr-indigo) / 0.15);
 }
 
 .btn-block {
