@@ -22,7 +22,18 @@
     <header class="navbar">
         <div class="nav-container">
             <a href="#home" class="logo">
-                <span class="logo-bracket">&lt;</span>Shawan<span class="logo-accent">Reddy</span><span class="logo-bracket">/&gt;</span>
+                <svg class="logo-icon" viewBox="0 0 24 24" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="hsl(var(--clr-indigo))" />
+                            <stop offset="100%" stop-color="hsl(var(--clr-cyan))" />
+                        </linearGradient>
+                    </defs>
+                    <polygon points="12,2 22,7 22,17 12,22 2,17 2,7" fill="none" stroke="url(#logoGrad)" stroke-width="2" stroke-linejoin="round" />
+                    <circle cx="12" cy="12" r="4" fill="none" stroke="url(#logoGrad)" stroke-width="1.8" />
+                    <circle cx="12" cy="12" r="1.5" fill="hsl(var(--clr-cyan))" />
+                </svg>
+                <span class="logo-text">Shawan<span class="logo-accent">Reddy</span></span>
             </a>
             <nav class="nav-menu" id="navMenu">
                 <a href="#home" class="nav-link active">Home</a>
