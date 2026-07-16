@@ -1,7 +1,7 @@
 /* ==========================================
    THEME TOGGLE SYSTEM (LIGHT/DARK)
    ========================================== */
-const themeToggleBtn = document.getElementById('themeToggleBtn');
+let themeToggleBtn;
 const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 
 const getCurrentTheme = () => {
@@ -33,15 +33,8 @@ const updateThemeToggleIcon = (theme) => {
     }
 };
 
-// Initialize theme
-setTheme(getCurrentTheme());
-
-if (themeToggleBtn) {
-    themeToggleBtn.addEventListener('click', () => {
-        const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        setTheme(newTheme);
-    });
-}
+// Initialize theme instantly to prevent flash
+document.documentElement.setAttribute('data-theme', getCurrentTheme());
 
 /* ==========================================
    MOBILE NAVIGATION TOGGLE
@@ -106,6 +99,16 @@ function type() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    themeToggleBtn = document.getElementById('themeToggleBtn');
+    updateThemeToggleIcon(getCurrentTheme());
+    
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+        });
+    }
+    
     setTimeout(type, 1000);
 });
 
