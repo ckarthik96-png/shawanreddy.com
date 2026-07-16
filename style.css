@@ -1248,6 +1248,24 @@ body {
     align-items: center;
 }
 
+.bridge-img {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 
+                0 0 40px rgba(99, 102, 241, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: var(--transition-smooth);
+}
+
+.bridge-img:hover {
+    transform: translateY(-5px) scale(1.02);
+    border-color: rgba(99, 102, 241, 0.2);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 
+                0 0 50px rgba(99, 102, 241, 0.1);
+}
+
 /* ==========================================
    RESPONSIVE LAYOUTS
    ========================================== */
