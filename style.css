@@ -246,16 +246,17 @@ body {
 /* Theme Toggle Button */
 .btn-theme {
     background: none;
-    border: 1px solid hsla(var(--clr-border) / 0.8);
+    border: 1px solid hsl(var(--clr-border));
     color: hsl(var(--clr-text-primary));
-    width: 38px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    background-color: hsla(var(--clr-surface) / 0.5);
+    background-color: hsl(var(--clr-surface));
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: var(--transition-fast);
     padding: 0;
     margin-right: 0.75rem;
