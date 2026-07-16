@@ -198,6 +198,28 @@ if (contactForm) {
         btnSubmit.disabled = true;
         
         const name = document.getElementById('formName').value.trim();
+        const email = document.getElementById('formEmail').value.trim();
+        const subject = document.getElementById('formSubject').value.trim();
+        const message = document.getElementById('formMessage').value.trim();
+        
+        // Save submission to localStorage for admin panel demo
+        const newInquiry = {
+            id: Date.now(),
+            name,
+            email,
+            subject,
+            message,
+            date: new Date().toLocaleString(),
+            status: 'unread'
+        };
+        
+        try {
+            const existingInquiries = JSON.parse(localStorage.getItem('inquiries') || '[]');
+            existingInquiries.unshift(newInquiry); // Newest first
+            localStorage.setItem('inquiries', JSON.stringify(existingInquiries));
+        } catch (err) {
+            console.error('Failed to save inquiry:', err);
+        }
         
         setTimeout(() => {
             formFeedback.textContent = `Thank you, ${name}! Your transmission was successful. I'll get back to you soon.`;

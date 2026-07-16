@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Shawan Reddy</title>
+    <!-- Google Fonts: Space Grotesk & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <script>
+        // Authentication Guard: run immediately to prevent layout flashes
+        const activeSession = sessionStorage.getItem('adminSession') || localStorage.getItem('adminSession');
+        if (!activeSession) {
+            window.location.href = 'login.html';
+        }
+        
+        // Theme initialization
+        const getCurrentTheme = () => {
+            return localStorage.getItem('theme') || 'dark';
+        };
+        document.documentElement.setAttribute('data-theme', getCurrentTheme());
+    </script>
+
+    <!-- Background Elements -->
+    <div class="glow-bg-blobs">
+        <div class="blob blob-indigo"></div>
+        <div class="blob blob-cyan"></div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="dashboard-navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="hsl(var(--clr-indigo))" />
+                            <stop offset="100%" stop-color="hsl(var(--clr-cyan))" />
+                        </linearGradient>
+                    </defs>
+                    <polygon points="12,2 22,7 22,17 12,22 2,17 2,7" fill="none" stroke="url(#logoGrad)" stroke-width="2" stroke-linejoin="round" />
+                    <circle cx="12" cy="12" r="4" fill="none" stroke="url(#logoGrad)" stroke-width="1.8" />
+                    <circle cx="12" cy="12" r="1.5" fill="hsl(var(--clr-cyan))" />
+                </svg>
+                <span class="logo-text">Control<span class="logo-accent">Center</span></span>
+            </a>
+            <div class="nav-cta">
+                <button id="themeToggleBtn" class="btn-theme" aria-label="Toggle Light/Dark Theme">
+                    <!-- Icon replaced dynamically by main.js -->
+                </button>
+                <button id="signOutBtn" class="btn btn-outline btn-sm">Sign Out</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+        <div class="dashboard-header">
+            <div>
+                <h1>Inquiry Dashboard</h1>
+                <p style="color: hsl(var(--clr-text-secondary));">Monitor and manage communications received via shawanreddy.com</p>
+            </div>
+        </div>
+
+        <!-- Metrics Overview Grid -->
+        <div class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-val" id="totalInquiriesCount">0</div>
+                <div class="stat-label">Total Submissions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val" id="unreadInquiriesCount" style="color: hsl(var(--clr-indigo));">0</div>
+                <div class="stat-label">Unread Messages</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val" style="color: hsl(var(--clr-emerald));">100%</div>
+                <div class="stat-label">Response Health</div>
+            </div>
+        </div>
+
+        <!-- Main Inquiries Table -->
+        <section class="dashboard-section">
+            <h3>Recent Submissions</h3>
+            <div class="inquiries-table-wrapper">
+                <table class="inquiries-table" id="inquiriesTable">
+                    <thead>
+                        <tr>
+                            <th>Sender</th>
+                            <th>Subject</th>
+                            <th>Received At</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inquiriesTableBody">
+                        <!-- Populated dynamically via JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem; color: hsl(var(--clr-text-muted));"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                <p>No messages received yet. Submit a message from the homepage form to test!</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Sign Out Script / Inquiries Management Logic -->
+    <script>
+        // Log out handler
+        document.getElementById('signOutBtn').addEventListener('click', () => {
+            sessionStorage.removeItem('adminSession');
+            localStorage.removeItem('adminSession');
+            window.location.href = 'index.html';
+        });
+
+        // Theme Switch Toggle logic inside dashboard
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const updateThemeToggleIcon = (theme) => {
+            if (!themeToggleBtn) return;
+            if (theme === 'dark') {
+                themeToggleBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="22" height="22">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+                    </svg>
+                `;
+            } else {
+                themeToggleBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="22" height="22">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                    </svg>
+                `;
+            }
+        };
+
+        updateThemeToggleIcon(getCurrentTheme());
+
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeToggleIcon(newTheme);
+        });
+
+        // Load and manage local inquiries list
+        const loadInquiries = () => {
+            const inquiries = JSON.parse(localStorage.getItem('inquiries') || '[]');
+            const tbody = document.getElementById('inquiriesTableBody');
+            const emptyState = document.getElementById('emptyState');
+            const table = document.getElementById('inquiriesTable');
+            
+            // Clear current list
+            tbody.innerHTML = '';
+
+            // Update stats counter
+            document.getElementById('totalInquiriesCount').textContent = inquiries.length;
+            const unreadCount = inquiries.filter(i => i.status === 'unread').length;
+            document.getElementById('unreadInquiriesCount').textContent = unreadCount;
+
+            if (inquiries.length === 0) {
+                table.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            table.style.display = 'table';
+            emptyState.style.display = 'none';
+
+            inquiries.forEach((inquiry) => {
+                const tr = document.createElement('tr');
+                if (inquiry.status === 'unread') {
+                    tr.classList.add('unread-row');
+                }
+
+                tr.innerHTML = `
+                    <td>
+                        <div style="font-weight:600;">${escapeHtml(inquiry.name)}</div>
+                        <div style="font-size:0.8rem; color:hsl(var(--clr-text-muted));">${escapeHtml(inquiry.email)}</div>
+                    </td>
+                    <td>
+                        <div style="font-weight:500;">${escapeHtml(inquiry.subject)}</div>
+                        <div style="font-size:0.85rem; margin-top:0.25rem;">${escapeHtml(inquiry.message)}</div>
+                    </td>
+                    <td>${inquiry.date}</td>
+                    <td>
+                        <span class="inquiry-status ${inquiry.status === 'unread' ? 'status-unread' : 'status-read'}">
+                            ${inquiry.status}
+                        </span>
+                    </td>
+                    <td>
+                        <div style="display:flex; gap:0.5rem;">
+                            <button class="btn btn-secondary btn-action-sm" onclick="toggleStatus(${inquiry.id})">
+                                ${inquiry.status === 'unread' ? 'Mark Read' : 'Mark Unread'}
+                            </button>
+                            <button class="btn btn-outline btn-action-sm" style="border-color:hsl(var(--clr-text-muted));" onclick="deleteInquiry(${inquiry.id})">
+                                Delete
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        };
+
+        const toggleStatus = (id) => {
+            const inquiries = JSON.parse(localStorage.getItem('inquiries') || '[]');
+            const idx = inquiries.findIndex(i => i.id === id);
+            if (idx > -1) {
+                inquiries[idx].status = inquiries[idx].status === 'unread' ? 'read' : 'unread';
+                localStorage.setItem('inquiries', JSON.stringify(inquiries));
+                loadInquiries();
+            }
+        };
+
+        const deleteInquiry = (id) => {
+            if (confirm('Are you sure you want to permanently delete this inquiry?')) {
+                let inquiries = JSON.parse(localStorage.getItem('inquiries') || '[]');
+                inquiries = inquiries.filter(i => i.id !== id);
+                localStorage.setItem('inquiries', JSON.stringify(inquiries));
+                loadInquiries();
+            }
+        };
+
+        const escapeHtml = (text) => {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        };
+
+        // Initial Load
+        loadInquiries();
+    </script>
+</body>
+</html>
