@@ -7,7 +7,7 @@ const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 const getCurrentTheme = () => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) return savedTheme;
-    return systemPrefersDark.matches ? 'dark' : 'light';
+    return 'dark'; // Default to dark mode
 };
 
 const setTheme = (theme) => {
